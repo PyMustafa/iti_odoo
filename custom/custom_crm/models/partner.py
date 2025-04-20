@@ -26,10 +26,10 @@ class ResPartner(models.Model):
     @api.model
     def create(self, vals):
         if "vat" not in vals or not vals["vat"]:
-            raise ValidationError("Tax ID hhhh is required for CRM Customers!")
+            raise ValidationError("Tax ID is required for CRM Customers!")
         return super().create(vals)
 
     def write(self, vals):
         if "vat" in vals and not vals["vat"]:
-            raise ValidationError("Tax ID is hhhhhhhhhhh required for CRM Customers!")
+            raise ValidationError("Tax ID is required for CRM Customers!")
         return super().write(vals)
