@@ -1,0 +1,57 @@
+<odoo>
+    <template id="patient_status_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="patient">
+                <div class="page">
+                    <h2>Patient Status Report</h2>
+                    <p><strong>Birth Date:</strong> <t t-esc="patient.birth_date"/></p>
+                    <p><strong>PCR:</strong> <t t-esc="patient.pcr"/></p>
+                    <p><strong>Blood Type:</strong> <t t-esc="patient.blood_type"/></p>
+                    <p><strong>Email:</strong> <t t-esc="patient.email"/></p>
+                    <p><strong>Name:</strong> <t t-esc="patient.first_name + ' ' + patient.last_name"/></p>
+                    <p><strong>Age:</strong> <t t-esc="patient.age"/></p>
+                    <p><strong>Department:</strong> <t t-esc="patient.department_id.name"/></p>
+                    <p><strong>Doctors:</strong> 
+                        <t t-foreach="patient.doctor_ids" t-as="doc">
+                            <t t-esc="doc.name"/><span t-if="not loop.last">, </span>
+                        </t>
+                    </p>
+                    
+                    <h3>Log History</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="patient.log_ids" t-as="log">
+                                <td><t t-esc="log.date"/></td>
+                                <td><t t-esc="log.description"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="patient_status_report_action"
+        model="hms.patient"
+        string="Patient Status Report"
+        report_type="qweb-pdf"
+        name="hms.patient_status_report"
+        file="hms.patient_status_report"
+        print_report_name="'Patient Status - %s %s' % (object.first_name, object.last_name)"
+    />
+    <record id="action_hms_report" model="ir.actions.act_window">
+        <field name="name">Reports</field>
+        <field name="res_model">hms.patient</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'show_hms': True}</field>
+    </record>
+    <menuitem id="submenu_hms_patient_report" parent="patient_menu" action="action_hms_report"/>
+
+</odoo>
